@@ -1,4 +1,9 @@
+### Deps
+```
+  npm install
+```
 
+### Usage
 ```javascript
 
   var gennifer = require( 'gennifer' );
@@ -18,4 +23,9 @@
     // will return the genrated data and automatically emit the new data
     .generate( 'tweet' );
 
+```
+
+### Run Tests
+```
+  npm test
 ```
