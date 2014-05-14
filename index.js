@@ -2,7 +2,8 @@
 'use strict';
 
 var casual = require( 'casual' );
-var channel; // needs to be an event emitter
+// needs to be an event emitter or at least implement .emit( 'event', someData )
+var channel;
 var ignoreChannel = false;
 var templates = {};
 
