@@ -14,7 +14,8 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "casual": "~1.4.6",
-    "traverse": "~0.6.6"
+    "traverse": "~0.6.6",
+    "moment": "~2.6.0"
   },
   "devDependencies": {
     "should": "~3.3.1",
