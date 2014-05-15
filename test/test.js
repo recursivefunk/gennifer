@@ -74,6 +74,7 @@ describe('Gennifer', function(){
       foo: {
         bar: 'bardata',
         another: 'moredatea',
+        when: new Date().toISOString(),
         someStuff: function() {
 
         },
@@ -87,6 +88,7 @@ describe('Gennifer', function(){
       foo: {
         bar: 'String',
         another: 'String',
+        when: 'Date',
         someStuff: 'Function',
         moreStuff: {
           foo: 'Array'
