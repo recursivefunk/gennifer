@@ -98,7 +98,8 @@ describe('Gennifer', function(){
       }
     };
 
-    var decoded = decoder.override({ created_at: 'Date' }).decodeObject( obj );
+    // var decoded = decoder.override({ created_at: 'Date' }).decodeObject( obj );
+    var decoded = gennifer.resolveTypes( obj, { created_at: 'Date' } );
     should( decoded ).eql( expected );
     done();
   });
