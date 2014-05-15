@@ -29,3 +29,15 @@
 ```
   npm test
 ```
+
+### To Do
+Register templates in bulk
+  - String that points to a directory of templates with one template per file
+  - String that points to a single file with many templates
+  - An object directly with multiple templates
+  - Finish ignore channel functionality
+  - A way to take an API response (from a service) and construct a template based
+    on that alone
+  - A built in transform function to modify a generated dataset to simulate
+    how grandstand changes data
+  - Configure from the client via sockets :)

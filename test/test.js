@@ -1,12 +1,14 @@
-/*global describe:false, it:false*/
+/*global describe:false, it:false, before: false*/
 
 'use strict';
 
 var should = require( 'should' );
 var casual = require( 'casual' );
-var emitter = require( './testEmitter' );
+var emitter = require( './resources/testEmitter' );
 
 describe('Gennifer', function(){
+
+  var io = require( 'socket.io' ).listen( 3000 );
 
   var template1 = function() {
     return {
@@ -43,6 +45,28 @@ describe('Gennifer', function(){
       .registerTemplate( 'tmpl2', template2 )
       .usingChannel( emitter )
       .generate( 'tmpl2' );
+  });
+
+  it('works with socket.io', function(done){
+
+    var socketClient = require('socket.io-client');
+    var client = socketClient.connect( 'http://localhost:3000' );
+
+    io.sockets.on('connection', function (socket) {
+      gennifer
+        .registerTemplate( 'tweet', template2 )
+        .usingChannel( socket )
+        .generate( 'tweet' );
+    });
+
+    client.on('tweet', function(data){
+      data.should.have.property( 'testProp2' );
+      var parts = data.testProp2.split( '-' );
+      parts[ 0 ].should.equal( 'testProp2' );
+      parts[ 1 ].should.be.ok;
+      done();
+    });
+
   });
 
 });
