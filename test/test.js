@@ -4,7 +4,7 @@
 
 var should = require( 'should' );
 var casual = require( 'casual' );
-var utils = require( '../lib/utils' );
+var decoder = require( '../lib/objectDecoder' );
 var emitter = require( './resources/testEmitter' );
 
 describe('Gennifer', function(){
@@ -75,6 +75,8 @@ describe('Gennifer', function(){
         bar: 'bardata',
         another: 'moredatea',
         when: new Date(),
+        itWorks: true,
+        created_at: 'Fri Oct 24 23:22:09 +0000 2008',
         someStuff: function() {},
         moreStuff: {
           foo: []
@@ -87,6 +89,8 @@ describe('Gennifer', function(){
         bar: 'String',
         another: 'String',
         when: 'Date',
+        itWorks: 'Boolean',
+        created_at: 'Date',
         someStuff: 'Function',
         moreStuff: {
           foo: 'Array'
@@ -94,7 +98,7 @@ describe('Gennifer', function(){
       }
     };
 
-    var decoded = utils.decodeObject( obj );
+    var decoded = decoder.override({ created_at: 'Date' }).decodeObject( obj );
     should( decoded ).eql( expected );
     done();
   });
