@@ -4,6 +4,7 @@
 
 var should = require( 'should' );
 var casual = require( 'casual' );
+var utils = require( '../lib/utils' );
 var emitter = require( './resources/testEmitter' );
 
 describe('Gennifer', function(){
@@ -66,7 +67,36 @@ describe('Gennifer', function(){
       parts[ 1 ].should.be.ok;
       done();
     });
+  });
 
+  it('detects api props', function(done){
+    var obj = {
+      foo: {
+        bar: 'bardata',
+        another: 'moredatea',
+        someStuff: function() {
+
+        },
+        moreStuff: {
+          foo: []
+        }
+      }
+    };
+
+    var expected = {
+      foo: {
+        bar: 'String',
+        another: 'String',
+        someStuff: 'Function',
+        moreStuff: {
+          foo: 'Array'
+        }
+      }
+    };
+
+    var decoded = utils.decodeObject( obj );
+    should( decoded ).eql( expected );
+    done();
   });
 
 });
