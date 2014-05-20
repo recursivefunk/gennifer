@@ -3,7 +3,11 @@
   npm install
 ```
 
-### Usage
+### Usage & installation
+#### As a module
+```
+  npm install gennifer --save
+```
 ```javascript
 
   var gennifer = require( 'gennifer' );
@@ -24,6 +28,16 @@
     .generate( 'tweet' );
 
 ```
+#### As a standalone-socket server
+```
+  [sudo] npm install -g gennifer
+  genneifer [ -f 1000 -v 1 -p 8080 ]
+```
+Just type
+```
+  genneifer
+```
+For available options
 
 ### On Dates & Strings
 There's no good way to distinguish between a string that's a number and a date string. For Instance '1' is a "valid date", but in the context of an application, probably is not actually representative of any point in time. To remedy this, you'd have to override the property to manually set the data type. See usage below:

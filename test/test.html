@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+
+<script src="http://localhost:8080/socket.io/socket.io.js"></script>
+<script>
+  'use strict';
+
+  var socket = io.connect('http://localhost:8080');
+  var dataCount = 0;
+  socket.on('time', function (data) {
+    console.log(data);
+    dataCount += 1;
+    if ( dataCount >= 5 ) {
+      socket.emit('configure', { frequency: 500, volume: 2} );
+    }
+  });
+</script>
+</body>
+</html>
