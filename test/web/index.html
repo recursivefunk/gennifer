@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <style>
+    body {
+      font-family:'Source Sans Pro', Helvetica, Arial, sans-serif;
+      color: white;
+      background: #3D3D3D;
+    }
+    .container {
+      height: 250px;
+      position: absolute;
+      left: 50%;
+      top: 30%;
+      margin-top: -125px;
+      margin-left: -585px;
+    }
+    .highlight {
+      color: #ff0074;
+    }
+    h1 {
+      font-size: 5em;
+      font-weight: 100;
+      text-align: center;
+      margin-top:0;
+    }
+    p {
+      text-align: center;
+      font-size: 1.5em;
+    }
+    a {
+      color: white;
+    }
+    div[class^=col-] {
+      text-align: center;
+    }
+    a:hover {
+      text-decoration:none;
+      color: #ff0074;
+    }
+    span[class*=icon-] {
+      font-size: 5em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><span class="highlight">Gen</span>nifer</h1>
+    <div class="row">
+      <div class="col-md-2 col-md-offset-2">
+        <a href="#" onclick="tuneFrequency('up')">
+          <span class="icon-up-open"></span>
+        </a>
+        <p>Frequency</p>
+        <p><span class="frequency highlight"></span> <span class="highlight">ms</span></p>
+        <a href="#" onclick="tuneFrequency('down')">
+          <span class="icon-down-arrow"></span>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <h1 id="numItems">0</h1>
+        <p>Number of datasets</p>
+      </div>
+      <div class="col-md-2 ">
+        <a href="#" onclick="tuneVolume('up')">
+          <span class="icon-up-open"></span>
+        </a>
+        <p>Volume</p>
+        <p><span class="volume highlight"></span></p>
+        <a href="#" onclick="tuneVolume('down')">
+          <span class="icon-down-arrow"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+<script src="countup.min.js"></script>
+<script src="http://localhost:8080/socket.io/socket.io.js"></script>
+<script>
+
+(function(){
+  'use strict';
+  var socket = io.connect('http://localhost:8080');
+  var dataCount = 0;
+  var volume = 1;
+  var frequency = 1000;
+
+  window.tuneVolume = function( direction ) {
+    if ( direction === 'up' ) {
+      volume += 1;
+    } else {
+      if ( volume > 1 ) {
+        volume -= 1;
+      }
+    }
+    socket.emit('configure', {volume: volume});
+    updateDom();
+  };
+
+  window.tuneFrequency = function( direction ) {
+    if ( direction === 'up' ) {
+      if ( frequency > 100 ) {
+        frequency -= 100;
+      }
+    } else {
+      frequency += 100;
+    }
+    socket.emit('configure', {frequency: frequency});
+    updateDom();
+  };
+
+  function updateDom() {
+    document.querySelectorAll( '.frequency' )[ 0 ].innerHTML = frequency;
+    document.querySelectorAll( '.volume' )[ 0 ].innerHTML = volume;
+  }
+
+  socket.on('time', function (data) {
+    var oldDataCount = dataCount;
+    dataCount += data.length;
+    var numAnim = new countUp("numItems", oldDataCount, dataCount, .5, 1);
+  });
+
+  socket.on('configuration', function(data){
+    frequency = data.frequency;
+    volume = data.volume;
+    updateDom();
+  });
+
+
+}());
+
+</script>
+</body>
+</html>
