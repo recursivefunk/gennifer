@@ -3,7 +3,7 @@
 
 var args = require( 'minimist' )( process.argv.slice( 2 ) );
 var logger = require( 'luvely' );
-var SocketManager = require( './lib/socketManager' );
+var ChannelManager = require( './lib/channelManager' );
 var utils = require( './lib/utils' );
 
 if ( !args.h ) {
@@ -27,7 +27,7 @@ if ( !args.h ) {
       frequency: frequency,
       volume: volume
     };
-    new SocketManager( socket, opts ).setTemplate( 'time', tmpl ).run();
+    new ChannelManager( socket, opts ).setTemplate( 'time', tmpl ).autoRun();
   });
 
 } else {
