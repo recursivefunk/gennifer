@@ -2,9 +2,12 @@
   "name": "gennifer",
   "version": "0.0.0",
   "description": "Fake social data generator",
-  "main": "index.js",
+  "main": "lib/gennifer.js",
   "scripts": {
     "test": "mocha test/test"
+  },
+  "bin": {
+    "npm": "index.js"
   },
   "repository": {
     "type": "git",
@@ -13,7 +16,12 @@
   "author": "iStrategyLabs <dev@istrategylabs.com>",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "casual": "~1.4.6"
+    "casual": "~1.4.6",
+    "traverse": "~0.6.6",
+    "moment": "~2.6.0",
+    "minimist": "~0.1.0",
+    "luvely": "0.0.1",
+    "socket.io": "~0.9.16"
   },
   "devDependencies": {
     "should": "~3.3.1",
