@@ -27,7 +27,10 @@ if ( !args.h ) {
       frequency: frequency,
       volume: volume
     };
-    new ChannelManager( socket, opts ).setTemplate( 'time', tmpl ).autoRun();
+
+    new ChannelManager( socket, opts )
+        .setTemplate( 'time', tmpl )
+        .autoRun();
   });
 
 } else {

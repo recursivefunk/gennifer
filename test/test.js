@@ -6,6 +6,7 @@ var should = require( 'should' );
 var casual = require( 'casual' );
 var decoder = require( '../lib/objectDecoder' );
 var emitter = require( './resources/testEmitter' );
+var Remitter = require( 'remitter' );
 
 describe('Gennifer', function(){
 
@@ -69,6 +70,28 @@ describe('Gennifer', function(){
       parts[ 1 ].should.be.ok;
       done();
     });
+  });
+
+  it('works with redis', function(done){
+    var redisChannel = new Remitter();
+
+    function onConnect() {
+      redisChannel.on('tweet', function(tweets){
+        var data = tweets[ 0 ];
+        data.should.have.property( 'testProp2' );
+        var parts = data.testProp2.split( '-' );
+        parts[ 0 ].should.equal( 'testProp2' );
+        parts[ 1 ].should.be.ok;
+        done();
+      });
+
+      gennifer
+        .registerTemplate( 'tweet', template2 )
+        .usingChannel( redisChannel )
+        .generate( 'tweet' );
+    }
+
+    redisChannel.connect( onConnect );
   });
 
   it('changes data volume', function(){
