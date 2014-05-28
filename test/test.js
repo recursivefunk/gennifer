@@ -46,7 +46,7 @@ describe('Gennifer', function(){
 
     gennifer
       .registerTemplate( 'tmpl2', template2 )
-      .usingChannel( emitter )
+      .channel( emitter )
       .generate( 'tmpl2' );
   });
 
@@ -58,7 +58,7 @@ describe('Gennifer', function(){
     io.sockets.on('connection', function (socket) {
       gennifer
         .registerTemplate( 'tweet', template2 )
-        .usingChannel( socket )
+        .channel( socket )
         .generate( 'tweet' );
     });
 
@@ -87,7 +87,7 @@ describe('Gennifer', function(){
 
       gennifer
         .registerTemplate( 'tweet', template2 )
-        .usingChannel( redisChannel )
+        .channel( redisChannel )
         .generate( 'tweet' );
     }
 

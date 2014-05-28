@@ -22,7 +22,7 @@
     .registerTemplate( 'tweet', tweetTmpl )
 
     // optional
-    .usingChannel( anEventEmitter )
+    .channel( anEventEmitter )
 
     // will return the genrated data and automatically emit the new data
     .generate( 'tweet' );
@@ -50,6 +50,7 @@ There's no good way to distinguish between a string that's a number and a date s
 When gennifer sees this property, she will use the overridden type. This obviously isn't the ideal situation as it forces you to at least know a bit about the data ahead of time, but such is the world in which we live.
 
 ### Run Tests
+You'll need to have redis running locally for all tests to pass
 ```
   npm test
 ```
