@@ -30,7 +30,7 @@ if ( !args.h ) {
 
     new ChannelManager( socket, opts )
         .setTemplate( 'time', tmpl )
-        .autoRun();
+        .monitor();
   });
 
 } else {
