@@ -7,7 +7,7 @@
     "test": "mocha test/test"
   },
   "bin": {
-    "npm": "index.js"
+    "npm": "cli.js"
   },
   "repository": {
     "type": "git",
