@@ -6,8 +6,9 @@
   "scripts": {
     "test": "mocha test/test"
   },
+  "preferGlobal": "true",
   "bin": {
-    "gennifer": "cli.js"
+    "gennifer": "./cli.js"
   },
   "repository": {
     "type": "git",
