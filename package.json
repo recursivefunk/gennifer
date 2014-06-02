@@ -1,15 +1,13 @@
 {
   "name": "gennifer",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "Fake social data generator",
   "main": "lib/gennifer.js",
   "scripts": {
     "test": "mocha test/test"
   },
   "preferGlobal": "true",
-  "bin": {
-    "gennifer": "./cli.js"
-  },
+  "bin": "./cli.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/istrategylabs/gennifer.git"
