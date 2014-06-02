@@ -7,7 +7,7 @@
     "test": "mocha test/test"
   },
   "bin": {
-    "npm": "cli.js"
+    "gennifer": "cli.js"
   },
   "repository": {
     "type": "git",
