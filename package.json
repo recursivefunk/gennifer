@@ -22,7 +22,8 @@
     "minimist": "~0.1.0",
     "luvely": "0.0.1",
     "socket.io": "1.0.2",
-    "remitter": "0.0.1"
+    "remitter": "0.0.1",
+    "walk": "~2.3.3"
   },
   "devDependencies": {
     "should": "~3.3.1",

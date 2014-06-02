@@ -109,6 +109,13 @@ describe('Gennifer', function(){
     parts[ 1 ].should.be.ok;
   });
 
+  it('loads templates from a js file', function(){
+    gennifer.loadTemplates( 'test/resources/templates.js' );
+    var templates = gennifer.templates();
+    templates.should.have.property( 'aTweet' );
+  });
+
+
   it('detects api props', function(done){
     var obj = {
       foo: {
