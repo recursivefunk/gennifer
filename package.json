@@ -1,6 +1,6 @@
 {
   "name": "gennifer",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Fake social data generator",
   "main": "lib/gennifer.js",
   "scripts": {
