@@ -58,7 +58,7 @@
 #### As a standalone-socket server
 ```
   [sudo] npm install -g gennifer
-  genneifer [ -f 1000 -v 1 -p 8080 ]
+  genneifer [ -f 1000 -v 1 -p 8080 -t ]
 ```
 Just type
 ```

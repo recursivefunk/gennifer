@@ -10,6 +10,12 @@ module.exports = {
       create_at: new Date(),
       username: '@' + casual.name
     };
+  },
+
+  time: function() {
+    return {
+      when: Date.now()
+    };
   }
 
 };

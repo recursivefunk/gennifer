@@ -25,6 +25,7 @@ describe('Gennifer', function(){
   };
 
   var gennifer = require( '../lib/gennifer' );
+  gennifer.registerTemplate( gennifer );
 
   it('registers a template', function(){
     gennifer.registerTemplate( 'tmpl1', template1 );
