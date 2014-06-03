@@ -6,7 +6,6 @@
   "scripts": {
     "test": "mocha test/test"
   },
-  "preferGlobal": "true",
   "bin": "./cli.js",
   "repository": {
     "type": "git",

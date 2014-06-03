@@ -28,6 +28,33 @@
     .generate( 'tweet' );
 
 ```
+#### Loading templates from a file
+```javascript
+
+  // in templates.js
+
+  // casual is the preferred underlying data generator but you can generate
+  // data with your templates in any manner you wish
+  var casual = require('casual');
+
+  module.exports = {
+    aTemplate: function() {
+      return {
+        dateFoo: casual.date,
+        aName: casual.name
+      }
+    }
+  }
+
+  // later...
+  gennifer.loadTemplates( './templates.js' );
+  var templates = gennifer.templates();
+  console.log( templates );
+  // { aTemplate: [Function] }
+
+```
+
+
 #### As a standalone-socket server
 ```
   [sudo] npm install -g gennifer
@@ -35,7 +62,7 @@
 ```
 Just type
 ```
-  genneifer
+  genneifer -h
 ```
 For available options
 
