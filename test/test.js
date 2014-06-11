@@ -37,16 +37,54 @@ describe('Gennifer', function(){
     parts[ 1 ].should.be.ok;
   });
 
-  it('works with an event emitter', function(){
+  it('works with an event emitter', function(done){
     emitter.on('tmpl2', function(data){
       data[ 0 ].should.have.property( 'testProp2' );
       var parts = data[ 0 ].testProp2.split( '-' );
       parts[ 0 ].should.equal( 'testProp2' );
       parts[ 1 ].should.be.ok;
+      emitter.removeAllListeners( 'tmpl2' );
+      done();
+    });
+      gennifer
+      .registerTemplate( 'tmpl2', template2 )
+      .channel( emitter )
+      .generate( 'tmpl2' );
+  });
+
+  it('maps data', function(done){
+    emitter.on('tmpl2', function(data){
+      data[ 0 ].should.have.property( 'testProp2' );
+      data[ 0 ].should.have.property( 'foo' );
+      data[ 0 ].foo.should.equal( 'bar' );
+      var parts = data[ 0 ].testProp2.split( '-' );
+      parts[ 0 ].should.equal( 'testProp2' );
+      parts[ 1 ].should.be.ok;
+      emitter.removeAllListeners( 'tmpl2' );
+      gennifer.removeMap();
+      done();
     });
 
     gennifer
-      .registerTemplate( 'tmpl2', template2 )
+      .map(function(item){
+        item.foo = 'bar';
+        return item;
+      })
+      .channel( emitter )
+      .generate( 'tmpl2' );
+  });
+
+  it('filters data', function(done){
+    emitter.on('tmpl2', function(data){
+      data.length.should.equal( 0 );
+      gennifer.removeFilter();
+      done();
+    });
+
+    gennifer
+      .filter(function(item){
+        ( item.testProp2 === 'blah' );
+      })
       .channel( emitter )
       .generate( 'tmpl2' );
   });
