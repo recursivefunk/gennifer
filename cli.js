@@ -7,6 +7,7 @@ var fs = require( 'fs' );
 var logger = require( 'luvely' );
 var ChannelManager = require( './lib/channelManager' );
 var utils = require( './lib/utils' );
+var clients = {};
 
 if ( !args.h ) {
 
@@ -37,11 +38,21 @@ if ( !args.h ) {
       volume: volume
     };
 
-    new ChannelManager( socket, opts )
-        .registerTemplates( templates )
-        .useTemplate( 'time' )
-        .monitor();
+    var newManager =
+      new ChannelManager( socket, opts )
+          .registerTemplates( templates )
+          .useTemplate( 'time' )
+          .monitor();
+
+    clients[ newManager.id() ] = newManager;
+
+    newManager.onDisconnect(function(){
+      delete clients[ newManager.id() ];
+    });
+
   });
+
+  logger.info( 'Ready :)' );
 
 } else {
   utils.printHelp();

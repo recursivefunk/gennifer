@@ -15,12 +15,13 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "casual": "~1.4.6",
-    "traverse": "~0.6.6",
-    "moment": "~2.6.0",
-    "minimist": "~0.1.0",
     "luvely": "0.0.1",
-    "socket.io": "1.0.2",
+    "minimist": "~0.1.0",
+    "moment": "~2.6.0",
+    "node-uuid": "^1.4.1",
     "remitter": "0.0.1",
+    "socket.io": "1.0.2",
+    "traverse": "~0.6.6",
     "walk": "~2.3.3"
   },
   "devDependencies": {
