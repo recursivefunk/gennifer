@@ -15,6 +15,7 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "casual": "~1.4.6",
+    "highland": "^1.25.4",
     "luvely": "0.0.1",
     "minimist": "~0.1.0",
     "moment": "~2.6.0",

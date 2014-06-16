@@ -9,8 +9,8 @@ var emitter = require( './resources/testEmitter' );
 var Remitter = require( 'remitter' );
 
 describe('Gennifer', function(){
-
-  var io = require( 'socket.io' ).listen( 3000 );
+  var socketPort = 3000;
+  var io = require( 'socket.io' ).listen( socketPort );
 
   var template1 = function() {
     return {
@@ -35,6 +35,28 @@ describe('Gennifer', function(){
     var parts = data[ 0 ].testProp1.split( '-' );
     parts[ 0 ].should.equal( 'testProp1' );
     parts[ 1 ].should.be.ok;
+  });
+
+  it('buffers stream results', function(done){
+    var numWrites = 2;
+    gennifer.stream( 'tmpl1' );
+    gennifer
+      .writeStream( 'tmpl1', numWrites )
+      .dumpStream( 'tmpl1', function(writes){
+        writes.length.should.equal( numWrites );
+        done();
+      });
+  });
+
+  it('works with streams', function(done){
+    var stream = gennifer.stream( 'tmpl1' );
+    stream.pull(function(err, items){
+      should.not.exist( err );
+      items.should.be.instanceOf( Array );
+      var data = items[ 0 ];
+      data.should.have.property( 'testProp1' );
+      done();
+    });
   });
 
   it('works with an event emitter', function(done){
@@ -92,7 +114,7 @@ describe('Gennifer', function(){
   it('works with socket.io', function(done){
 
     var socketClient = require('socket.io-client');
-    var client = socketClient.connect( 'http://localhost:3000' );
+    var client = socketClient.connect( 'http://localhost:socketPort' );
 
     io.sockets.on('connection', function (socket) {
       gennifer
