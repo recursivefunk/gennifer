@@ -114,7 +114,7 @@ describe('Gennifer', function(){
   it('works with socket.io', function(done){
 
     var socketClient = require('socket.io-client');
-    var client = socketClient.connect( 'http://localhost:socketPort' );
+    var client = socketClient.connect( 'http://localhost:' + socketPort );
 
     io.sockets.on('connection', function (socket) {
       gennifer
