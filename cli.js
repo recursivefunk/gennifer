@@ -13,7 +13,7 @@ if ( !args.h ) {
 
   var frequency = args.f || 1000;
   var volume = args.v || 1;
-  var port = args.p || 8080;
+  var port = args.p || 3000;
   var io = require( 'socket.io' ).listen( port );
   var templates;
 
