@@ -4,10 +4,10 @@
 var casual = require( 'casual' );
 
 module.exports = {
-  aTemplate: function() {
+  nameDate: function() {
     return {
       date: casual.date,
       name: casual.name
-    }
+    };
   }
-}
+};
