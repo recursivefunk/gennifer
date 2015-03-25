@@ -5,7 +5,7 @@
 var stream = require( 'stream' );
 var should = require( 'should' );
 var casual = require( 'casual' );
-var cu     = require( '../lib/casualUtils' ).useInstance( casual );
+var engine = require( '../lib/engineUtils' ).useEngine( casual );
 var fs     = require('fs');
 var decoder = require( '../lib/objectDecoder' );
 var emitter = require( './resources/testEmitter' );
@@ -16,18 +16,18 @@ describe('Gennifer', function(){
 
   var template1 = function() {
     return {
-      testProp1: 'testProp1-' + cu.gen( 'name' ),
+      testProp1: 'testProp1-' + engine.gen( 'name' ),
       foodata: casual.date( 'YYYY-MM-DD' )
     };
   };
 
   var template2 = function() {
     return {
-      testProp2: 'testProp2-' + cu.gen( 'name' )
+      testProp2: 'testProp2-' + engine.gen( 'name' )
     };
   };
 
-  var gennifer = require( '../lib/gennifer2' )();
+  var gennifer = require( '../lib/gennifer' )();
 
   it('registers a template', function(done) {
     gennifer
@@ -123,8 +123,14 @@ describe('Gennifer', function(){
 
   });
 
-  // it('loads templates from a js file', function(){
-  //   gennifer.loadTemplates( 'test/resources/templates.js' );
+  it('loads templates from a js file', function(){
+    gennifer.loadConfig( 'test/resources/templates.js' );
+    var templates = gennifer.templates();
+    templates.should.have.property( 'aTweet' );
+  });
+
+  // it('loads templates from a config file', function(){
+  //   gennifer.loadConfig( 'test/resources/gennifer.config' );
   //   var templates = gennifer.templates();
   //   templates.should.have.property( 'aTweet' );
   // });
