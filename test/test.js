@@ -41,7 +41,12 @@ describe('Gennifer', function(){
         gennifer.removeAllListeners();
         done();
       })
-      .generate( 'tmpl1' );
+      .pipeGen( 'tmpl1' );
+  });
+
+  it('generates a data item', function() {
+    var obj = gennifer.generate( 'tmpl1' );
+    obj.should.be.instanceOf( Array );
   });
 
   it('is a stream', function(done) {
@@ -63,7 +68,7 @@ describe('Gennifer', function(){
         gennifer.removeAllListeners();
         done();
       })
-      .generate( 'tmpl1' )
+      .pipeGen( 'tmpl1' )
       .pipe( process.stdout );
   });
 
@@ -80,7 +85,7 @@ describe('Gennifer', function(){
     gennifer
       .registerTemplate( 'tmpl2', template2 )
       .channel( emitter )
-      .generate( 'tmpl2' );
+      .pipeGen( 'tmpl2' );
   });
 
   it('works with socket.io', function(done){
@@ -92,7 +97,7 @@ describe('Gennifer', function(){
       gennifer
         .registerTemplate( 'tweet', template2 )
         .channel( socket )
-        .generate( 'tweet' );
+        .pipeGen( 'tweet' );
     });
 
     client.on('tweet', function(tweets){
@@ -119,7 +124,7 @@ describe('Gennifer', function(){
         done();
       })
       .volume( 2 )
-      .generate( 'tmpl1' );
+      .pipeGen( 'tmpl1' );
 
   });
 

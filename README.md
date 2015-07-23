@@ -10,7 +10,7 @@
 ```
 ```javascript
 
-  var gennifer = require( 'gennifer' );
+  var gennifer = require( 'gennifer' )();
   var tweetTmpl = function() {
     return {
       user: '@recursivefunk',
@@ -18,14 +18,18 @@
     };
   };
 
-  gennifer
-    .registerTemplate( 'tweet', tweetTmpl )
+  gennifer.registerTemplate( 'tweet', tweetTmpl );
 
+  // generate a data item
+  var item = gennifer.generate( 'tweet' );
+
+  // use a stream
+
+  gennifer
     // optional
     .channel( anEventEmitter )
-
     // will return the genrated data and automatically emit the new data
-    .generate( 'tweet' );
+    .pipeGen( 'tweet' );
 
 ```
 #### Loading templates from a file
@@ -68,13 +72,13 @@ For available options
 
 
 ### Streams
-Gennifer is also a native nodejs stream
+Gennifer is also a native nodejs stream.
 ```javascript
     gennifer
       .on('data', function( items ){
         // do something perhaps
       })
-      .generate( 'tmpl1' )
+      .pipeGen( 'tmpl1' )
       .pipe( process.stdout );    
 ```
 
