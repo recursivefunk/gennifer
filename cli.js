@@ -5,7 +5,7 @@
 var path            = require( 'path' );
 var args            = require( 'minimist' )( process.argv.slice( 2 ) );
 var utils           = require( './lib/utils' );
-var logger          = require( 'luvely' );
+var log             = require( 'luvely' );
 var ChannelManager  = require( './lib/channelManager' );
 var utils           = require( './lib/utils' );
 var clients         = {};
@@ -27,6 +27,7 @@ if ( !args.h ) {
     };
 
     templates = { time: tmpl };
+    defaultTemplate = 'time';
   } else {
     templates = require( path.resolve( args.t ) );
     // the default template will be default be the
@@ -37,18 +38,19 @@ if ( !args.h ) {
         break;
       }
     }
-    logger.debug( 'Found default tempalte \'%s\' ', defaultTemplate );
+    log.debug( 'Found default tempalte \'%s\' ', defaultTemplate );
   }
 
   var debugMsg = 'Starting gennifer in server mode. Frequency: '+
                  '1 tick/%sms, Volume: %s item(s)/tick';
-  logger.debug( debugMsg, frequency, volume );
+  log.debug( debugMsg, frequency, volume );
 
   io.sockets.on('connection', function (socket) {
-    logger.debug( 'connection' );
+    log.debug( 'Socket %s connected', socket.id );
     var opts = {
       frequency: frequency,
-      volume: volume
+      volume: volume,
+      socketId: socket.id
     };
 
     var newManager =
@@ -65,7 +67,7 @@ if ( !args.h ) {
 
   });
 
-  logger.info( 'Ready :)' );
+  log.info( 'Ready :)' );
 
 } else {
   utils.printHelp();

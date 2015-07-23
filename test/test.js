@@ -2,11 +2,13 @@
 
 'use strict';
 
+var stream = require( 'stream' );
 var should = require( 'should' );
 var casual = require( 'casual' );
+var engine = require( '../lib/engineUtils' ).useEngine( casual );
+var fs     = require('fs');
 var decoder = require( '../lib/objectDecoder' );
 var emitter = require( './resources/testEmitter' );
-var Remitter = require( 'remitter' );
 
 describe('Gennifer', function(){
   var socketPort = 3000;
@@ -14,49 +16,55 @@ describe('Gennifer', function(){
 
   var template1 = function() {
     return {
-      testProp1: 'testProp1-' + casual.name
+      testProp1: 'testProp1-' + engine.gen( 'name' ),
+      foodata: casual.date( 'YYYY-MM-DD' )
     };
   };
 
   var template2 = function() {
     return {
-      testProp2: 'testProp2-' + casual.name
+      testProp2: 'testProp2-' + engine.gen( 'name' )
     };
   };
 
-  var gennifer = require( '../lib/gennifer' );
-  gennifer.registerTemplate( gennifer );
+  var gennifer = require( '../lib/gennifer' )();
 
-  it('registers a template', function(){
-    gennifer.registerTemplate( 'tmpl1', template1 );
-    var data = gennifer.generate( 'tmpl1' );
-    data.should.be.instanceOf( Array );
-    data[ 0 ].should.have.property( 'testProp1' );
-    var parts = data[ 0 ].testProp1.split( '-' );
-    parts[ 0 ].should.equal( 'testProp1' );
-    parts[ 1 ].should.be.ok;
-  });
-
-  it('buffers stream results', function(done){
-    var numWrites = 2;
-    gennifer.stream( 'tmpl1' );
+  it('registers a template', function(done) {
     gennifer
-      .writeStream( 'tmpl1', numWrites )
-      .dumpStream( 'tmpl1', function(writes){
-        writes.length.should.equal( numWrites );
+      .registerTemplate( 'tmpl1', template1 )
+      .on('tmpl1', function(data){
+        data.should.be.instanceOf( Array );
+        data[ 0 ].should.have.property( 'testProp1' );
+        var parts = data[ 0 ].testProp1.split( '-' );
+        parts[ 0 ].should.equal( 'testProp1' );
+        parts[ 1 ].should.be.ok;
+        gennifer.removeAllListeners();
         done();
-      });
+      })
+      .generate( 'tmpl1' );
   });
 
-  it('works with streams', function(done){
-    var stream = gennifer.stream( 'tmpl1' );
-    stream.pull(function(err, items){
-      should.not.exist( err );
-      items.should.be.instanceOf( Array );
-      var data = items[ 0 ];
-      data.should.have.property( 'testProp1' );
-      done();
+  it('is a stream', function(done) {
+
+    // duck type checks
+    var streamFuncs = [ 'pipe', 'on', 'emit', 'once' ];
+
+    streamFuncs.forEach(function( funcName ) {
+      gennifer[ funcName ].should.be.instanceOf( Function );
     });
+
+    gennifer
+      .on('data', function( items ){
+        var obj = JSON.parse( items );
+        var data = obj.data;
+        obj.should.be.instanceOf( Object );
+        obj.should.have.property( 'template' );
+        data.should.be.instanceOf( Array );
+        gennifer.removeAllListeners();
+        done();
+      })
+      .generate( 'tmpl1' )
+      .pipe( process.stdout );
   });
 
   it('works with an event emitter', function(done){
@@ -68,45 +76,9 @@ describe('Gennifer', function(){
       emitter.removeAllListeners( 'tmpl2' );
       done();
     });
-      gennifer
+
+    gennifer
       .registerTemplate( 'tmpl2', template2 )
-      .channel( emitter )
-      .generate( 'tmpl2' );
-  });
-
-  it('maps data', function(done){
-    emitter.on('tmpl2', function(data){
-      data[ 0 ].should.have.property( 'testProp2' );
-      data[ 0 ].should.have.property( 'foo' );
-      data[ 0 ].foo.should.equal( 'bar' );
-      var parts = data[ 0 ].testProp2.split( '-' );
-      parts[ 0 ].should.equal( 'testProp2' );
-      parts[ 1 ].should.be.ok;
-      emitter.removeAllListeners( 'tmpl2' );
-      gennifer.removeMap();
-      done();
-    });
-
-    gennifer
-      .map(function(item){
-        item.foo = 'bar';
-        return item;
-      })
-      .channel( emitter )
-      .generate( 'tmpl2' );
-  });
-
-  it('filters data', function(done){
-    emitter.on('tmpl2', function(data){
-      data.length.should.equal( 0 );
-      gennifer.removeFilter();
-      done();
-    });
-
-    gennifer
-      .filter(function(item){
-        ( item.testProp2 === 'blah' );
-      })
       .channel( emitter )
       .generate( 'tmpl2' );
   });
@@ -133,48 +105,35 @@ describe('Gennifer', function(){
     });
   });
 
-  it('works with redis', function(done){
-    var redisChannel = new Remitter();
-
-    function onConnect() {
-      redisChannel.on('tweet', function(tweets){
-        var data = tweets[ 0 ];
-        data.should.have.property( 'testProp2' );
-        var parts = data.testProp2.split( '-' );
-        parts[ 0 ].should.equal( 'testProp2' );
+  it('changes data volume', function(done){
+    gennifer
+      .registerTemplate( 'tmpl1', template1 )
+      .on('tmpl1', function( data ) {
+        data.should.be.instanceOf( Array );
+        data.length.should.equal( 2 );
+        data[ 0 ].should.have.property( 'testProp1' );
+        var parts = data[ 0 ].testProp1.split( '-' );
+        parts[ 0 ].should.equal( 'testProp1' );
         parts[ 1 ].should.be.ok;
+        gennifer.removeAllListeners();
         done();
-      });
+      })
+      .volume( 2 )
+      .generate( 'tmpl1' );
 
-      gennifer
-        .registerTemplate( 'tweet', template2 )
-        .channel( redisChannel )
-        .generate( 'tweet' );
-    }
-
-    redisChannel.connect( onConnect );
-  });
-
-  it('changes data volume', function(){
-    gennifer.registerTemplate( 'tmpl1', template1 );
-    var data =
-      gennifer
-        .volume( 2 )
-        .generate( 'tmpl1' );
-
-    data.should.be.instanceOf( Array );
-    data.length.should.equal( 2 );
-    data[ 0 ].should.have.property( 'testProp1' );
-    var parts = data[ 0 ].testProp1.split( '-' );
-    parts[ 0 ].should.equal( 'testProp1' );
-    parts[ 1 ].should.be.ok;
   });
 
   it('loads templates from a js file', function(){
-    gennifer.loadTemplates( 'test/resources/templates.js' );
+    gennifer.loadConfig( 'test/resources/templates.js' );
     var templates = gennifer.templates();
     templates.should.have.property( 'aTweet' );
   });
+
+  // it('loads templates from a config file', function(){
+  //   gennifer.loadConfig( 'test/resources/gennifer.config' );
+  //   var templates = gennifer.templates();
+  //   templates.should.have.property( 'aTweet' );
+  // });
 
 
   it('detects api props', function(done){

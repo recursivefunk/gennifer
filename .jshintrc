@@ -17,8 +17,6 @@
     "maxlen": 80,
     "esnext": true,
     "globalstrict": true,
-    "browser": true,
-    "jquery": true,
     "node": true
 
 }

@@ -1,21 +1,20 @@
 
 'use strict';
 
-var casual = require( 'casual' );
+module.exports = function( casual ) {
+  return {
+    aTweet: function() {
+      return {
+        create_at: new Date(),
+        username: '@' + casual.name
+      };
+    },
 
-module.exports = {
+    time: function() {
+      return {
+        when: Date.now()
+      };
+    }
 
-  aTweet: function() {
-    return {
-      create_at: new Date(),
-      username: '@' + casual.name
-    };
-  },
-
-  time: function() {
-    return {
-      when: Date.now()
-    };
-  }
-
+  };
 };
