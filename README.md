@@ -68,37 +68,15 @@ For available options
 
 
 ### Streams
-Gennifer supports the usage of [highland streams](http://highlandjs.org/). Gennifer will act as a generator which gets lazily evaluated at the user's request
+Gennifer is also a native nodejs stream
 ```javascript
-  // generates and returns a stream with the specified template
-  var fooStream = gennifer.stream( 'templateName' );
-
-  // lazily pull an item from the stream - generator style
-  fooStream.pull(function(err, items){
-    // you know the deal
-  });
-
-  // a wrapper form highland's .write function. The second (optional) argument, numWrites
-  // tells gennifer how many times to write a generated data item to the stream.
-  // CAREFUL => numWrites does not affect volume. If you set gennifers volume
-  // to 5 then tell the stream to write 5 times you will get 5 writes of 5 items.
-  gennifer.writeStream( 'templateName', numWrites );
-
-  // to fetch the written items dump the stream (which also destroys the stream)
-  gennifer.dumpStream('templateName', function(items){
-    // items is an array of newly generated template instances
-  });
+    gennifer
+      .on('data', function( items ){
+        // do something perhaps
+      })
+      .generate( 'tmpl1' )
+      .pipe( process.stdout );    
 ```
-
-### On Dates & Strings
-There's no good way to distinguish between a string that's a number and a date string. For Instance '1' is a "valid date", but in the context of an application, probably is not actually representative of any point in time. To remedy this, you'd have to override the property to manually set the data type. See usage below:
-
-```javascript
-  var obj = { foo: 'bar', created_at: 'Fri Oct 24 23:22:09 +0000 2008' };
-  var decoded = genneifer.resolveTypes( obj, { created_at: 'Date' } );
-  console.log( decoded ); // { foo: 'String', created_at: 'Date' }
-```
-When gennifer sees this property, she will use the overridden type. This obviously isn't the ideal situation as it forces you to at least know a bit about the data ahead of time, but such is the world in which we live.
 
 ### Run Tests
 You'll need to have redis running locally for all tests to pass
