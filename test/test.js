@@ -160,7 +160,7 @@ test('detects api props', ( t ) => {
     }
   };
 
-  var decoded = gennifer.resolveTypes( obj, { created_at: 'Date' } ); // jshint ignore: line
+  const decoded = gennifer.resolveTypes( obj, { created_at: 'Date' } ); // jshint ignore: line
   t.same( decoded, expected );
   t.end();
 });
